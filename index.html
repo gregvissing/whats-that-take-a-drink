@@ -139,24 +139,22 @@
 
         const EMOJIS = document.querySelector(".emojis")
         const PROCESS_AUDIO = e => {
-        const TRANSCRIPT = e.results[e.results.length - 1][0].transcript
-            .toLowerCase()
-            .trim()
-        for (const PARTICLE of PARTICLES) {
-            if (TRANSCRIPT.indexOf(PARTICLE.trigger) !== -1) {
-            const P = document.createElement("div")
-            P.innerText = PARTICLE.emoji
-            P.className = PARTICLE.trigger
-            EMOJIS.appendChild(P)
-            if (PARTICLE.trigger === "wood" || PARTICLE.trigger === "chuck") {
-                P.addEventListener("animationend", () => {
-                P.remove()
-                })
+            const TRANSCRIPT = e.results[e.results.length - 1][0].transcript
+                .toLowerCase()
+                .trim()
+            for (const PARTICLE of PARTICLES) {
+                if (TRANSCRIPT.indexOf(PARTICLE.trigger) !== -1) {
+                    const P = document.createElement("div")
+                    P.innerText = PARTICLE.emoji
+                    P.className = PARTICLE.trigger
+                    EMOJIS.appendChild(P)
+
+                    P.style.setProperty("--index", EMOJIS.children.length)
+                } else {
+                    console.log("stop");
+                }
             }
-            P.style.setProperty("--index", EMOJIS.children.length)
-            }
-        }
-        document.querySelector("main").innerText = TRANSCRIPT
+            document.querySelector("main").innerText = TRANSCRIPT
         }
 
         RECOG.onresult = PROCESS_AUDIO
