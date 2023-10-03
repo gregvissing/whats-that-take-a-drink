@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import "https://unpkg.com/open-props/open-props.min.css";
+        @import "https://unpkg.com/open-props/normalize.min.css";
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --recording: 0;
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+        }
+
+        main {
+            max-inline-size: var(--size-content-1);
+            font-family: 'Google Sans', sans-serif;
+            font-size: var(--font-size-fluid-1);
+        }
+
+        .recording-status {
+            display:none;
+            height: 5vmin;
+            aspect-ratio: 1;
+            position: fixed;
+            top: 2vmin;
+            right: 2vmin;
+            background: hsl(10 80% 50%);
+            border-radius: 50%;
+            animation: pulse calc(var(--recording, 0) * 1s) infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .instruction {
+            opacity: 0.6;
+            display: none;
+        }
+
+
+        .emojis {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .emojis div {
+            font-size: 10vmin;
+        }
+    </style>
+</head>
+<body>
+    <main><span class="instruction">Start Speaking!</main>
+    <div class="recording-status"></div>
+    <span class="emojis"></span>
+    <script>
+        window.SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition
+
+        const RECOG = new window.SpeechRecognition()
+        RECOG.continuous = true
+        RECOG.interimResults = true
+
+
+        const STATE = {
+        RUNNING: false,
+        }
+
+        const START = () => {
+        if (!STATE.RUNNING) {
+            STATE.RUNNING = true
+            document.body.style.setProperty("--recording", 1)
+            RECOG.start()
+        }
+        }
+
+        const PARTICLES = [
+        {
+            trigger: "what's that",
+            emoji: "Take a 🍺"
+        },
+        /*
+        {
+            trigger: "lit",
+            emoji: "🔥"
+        },
+        {
+            trigger: "boom",
+            emoji: "💣"
+        },
+        {
+            trigger: "wood",
+            emoji: "🌴",
+        },
+        {
+            trigger: "chuck",
+            emoji: "🪓"
+        },
+        {
+            trigger: "poop",
+            emoji: "💩"
+        },
+        {
+            trigger: "unicorn",
+            emoji: "🦄"
+        },
+        {
+            trigger: "rainbow",
+            emoji: "🌈"
+        },
+        {
+            trigger: "pizza",
+            emoji: "🍕"
+        },
+        {
+            trigger: "cake",
+            emoji: "🎂"
+        },
+        {
+            trigger: "slice",
+            emoji: "🍰"
+        },
+        {
+            trigger: "cupcake",
+            emoji: "🧁"
+        },
+        {
+            trigger: "cream",
+            emoji: "🍦"
+        },
+        {
+            trigger: "pie",
+            emoji: "🥧"
+        },
+        {
+            trigger: "sundae",
+            emoji: "🍨"
+        },
+        {
+            trigger: "kona",
+            emoji: "🍧"
+        },
+        {
+            trigger: "cake pop",
+            emoji: "🍡"
+        },
+        {
+            trigger: "softball",
+            emoji: "🥎"
+        },
+        {
+            trigger: "chocolate",
+            emoji: "🍫"
+        },
+        {
+            trigger: "heart",
+            emoji: "💜"
+        },
+        {
+            trigger: "circle",
+            emoji: "🟣"
+        },
+        {
+            trigger: "square",
+            emoji: "🟪"
+        },
+        {
+            trigger: "flag",
+            emoji: "🇺🇸"
+        },
+        {
+            trigger: "donut",
+            emoji: "🍩"
+        },
+        {
+            trigger: "bunny",
+            emoji: "🐰"
+        },
+        {
+            trigger: "hamster",
+            emoji: "🐹"
+        },
+        {
+            trigger: "dog",
+            emoji: "🐶"
+        },
+        {
+            trigger: "penguin",
+            emoji: "🐧"
+        },
+        {
+            trigger: "fairy",
+            emoji: "🧚"
+        },
+        {
+            trigger: "gift",
+            emoji: "🎁"
+        },
+        {
+            trigger: "mermaid",
+            emoji: "🧜‍"
+        },
+        {
+            trigger: "dress",
+            emoji: "👗"
+        },
+        {
+            trigger: "hat",
+            emoji: "👒"
+        },
+        {
+            trigger: "koala",
+            emoji: "🐨"
+        },
+        {
+            trigger: "fox",
+            emoji: "🦊"
+        },
+        {
+            trigger: "panda",
+            emoji: "🐼"
+        },
+        {
+            trigger: "egg",
+            emoji: "🐣"
+        },
+        {
+            trigger: "chick",
+            emoji: "🐥"
+        },
+        {
+            trigger: "toilet paper",
+            emoji: "🧻"
+        },
+        {
+            trigger: "burger",
+            emoji: "🍔"
+        },
+        {
+            trigger: "money bag",
+            emoji: "💰"
+        },
+        {
+            trigger: "flying money",
+            emoji: "💸"
+        } */
+        //  
+        ] 
+
+        const EMOJIS = document.querySelector(".emojis")
+        const PROCESS_AUDIO = e => {
+        const TRANSCRIPT = e.results[e.results.length - 1][0].transcript
+            .toLowerCase()
+            .trim()
+        for (const PARTICLE of PARTICLES) {
+            if (TRANSCRIPT.indexOf(PARTICLE.trigger) !== -1) {
+            const P = document.createElement("div")
+            P.innerText = PARTICLE.emoji
+            P.className = PARTICLE.trigger
+            EMOJIS.appendChild(P)
+            if (PARTICLE.trigger === "wood" || PARTICLE.trigger === "chuck") {
+                P.addEventListener("animationend", () => {
+                P.remove()
+                })
+            }
+            P.style.setProperty("--index", EMOJIS.children.length)
+            }
+        }
+        document.querySelector("main").innerText = TRANSCRIPT
+        }
+
+        RECOG.onresult = PROCESS_AUDIO
+
+
+        START()
+    </script>
+</body>
+</html>
