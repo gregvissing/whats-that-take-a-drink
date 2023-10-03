@@ -64,9 +64,24 @@
         .emojis div {
             font-size: 10vmin;
         }
+        .legend {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 300px;
+        }
     </style>
 </head>
 <body>
+    <div class="legend">
+        <h1>Trigger Words</h1>
+        <ul>
+            <li>What's that</li>
+            <li>Gift</li>
+            <li>Card</li>
+            <li>Bank</li>            
+        </ul>
+    </div>
     <main><span class="instruction">Start Speaking!</main>
     <div class="recording-status"></div>
     <span class="emojis"></span>
@@ -103,6 +118,10 @@
         {
             trigger: "card",
             emoji: "🪪"
+        },
+        {
+            trigger: "bank",
+            emoji: "🏦"
         }
             
         //  
