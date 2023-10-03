@@ -105,11 +105,11 @@
         }
 
         const START = () => {
-        if (!STATE.RUNNING) {
-            STATE.RUNNING = true
-            document.body.style.setProperty("--recording", 1)
-            RECOG.start()
-        }
+            if (!STATE.RUNNING) {
+                STATE.RUNNING = true
+                document.body.style.setProperty("--recording", 1)
+                RECOG.start()
+            }
         }
 
         const PARTICLES = [
